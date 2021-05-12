@@ -4,6 +4,8 @@ const app = express();
 const axios = require("axios").default;
 var path = require("path");
 
+var pokeCache = new Map();
+
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -13,6 +15,13 @@ app.get(["/queryForm", "/"], (req, res) => {
 
 app.get("/pokemon", (req, res) => {
   const pokeName = req.query.name;
+  let pokeJSON;
+
+  if (pokeCache.has(pokeName)) {
+    pokeJSON = pokeCache.get(pokeName);
+    res.json(pokeJSON).status(200);
+    return;
+  }
 
   axios
     .get("https://pokeapi.co/api/v2/pokemon/" + pokeName)
@@ -31,8 +40,7 @@ app.get("/pokemon", (req, res) => {
         weight: pokemon_data["weight"] / 10,
       };
 
-      //res = corsHeaders(res);
-
+      pokeCache.set(pokeName, response); // Server cache
       console.log("SUCCESSFUL RESPONSE\n" + JSON.stringify(response));
       res.status(200);
       res.json(response);

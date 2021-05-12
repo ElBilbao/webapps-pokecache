@@ -33,8 +33,6 @@ function pokeRequest(name) {
 }
 
 function successfulRequest(name, pokeInfo) {
-  //window.localStorage.setItem(name, pokeInfo); // Local cache
-  pokeStorage.set(name, pokeInfo); // Server cache
   let pokejson = JSON.parse(pokeInfo);
   console.log(pokejson);
 
@@ -116,9 +114,9 @@ function successfulRequest(name, pokeInfo) {
 
     // Remove weight from deck sum
     deckWeight = parseFloat(document.getElementById("totalWeight").innerHTML);
-    deletedTitle = event.target.parentNode.parentNode.getElementsByClassName(
-      "card-title"
-    )[0].innerText;
+    deletedTitle =
+      event.target.parentNode.parentNode.getElementsByClassName("card-title")[0]
+        .innerText;
 
     // Parsing weight out of title
     let start = deletedTitle.indexOf("- ") + 2;
